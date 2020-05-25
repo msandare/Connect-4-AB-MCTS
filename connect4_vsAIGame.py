@@ -353,3 +353,4 @@ while not game_over:
         game_over = True
     if game_over:
         pygame.time.wait(3000)
+
