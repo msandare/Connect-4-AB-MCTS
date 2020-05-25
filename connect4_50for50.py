@@ -405,4 +405,3 @@ for n in range(50):
     endgame_results(total_games, alphaBetawins, MCTSwins)
 
 f.close()
-
