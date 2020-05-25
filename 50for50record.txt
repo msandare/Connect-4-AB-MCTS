@@ -1,0 +1,17 @@
+Round 0Simulations: 200
+[AlphaBeta Wins: 22]   [MCTSwins: 28]
+Round 1Simulations: 200
+[AlphaBeta Wins: 48]   [MCTSwins: 52]
+Round 2Simulations: 200
+[AlphaBeta Wins: 74]   [MCTSwins: 76]
+Round 3Simulations: 200
+[AlphaBeta Wins: 104]   [MCTSwins: 96]
+Round 4Simulations: 200
+[AlphaBeta Wins: 129]   [MCTSwins: 121]
+Round 5Simulations: 200
+[AlphaBeta Wins: 155]   [MCTSwins: 145]
+Round 6Simulations: 200
+[AlphaBeta Wins: 176]   [MCTSwins: 174]
+Round 7Simulations: 200
+[AlphaBeta Wins: 203]   [MCTSwins: 197]
+Round 8Simulations: 200

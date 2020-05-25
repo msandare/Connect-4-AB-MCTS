@@ -305,11 +305,11 @@ def endgame_results(total_games, alphaBetawins, MCTSwins):
     screen.blit(ABwinsLabel, (40,300))        
     screen.blit(MCSTSwinsLabel, (40,500)) 
     pygame.display.update()       
-    pygame.time.wait(3000)
+    #pygame.time.wait(3000)
 
 
 #main function
-total_games= 3
+total_games= 50
 alphaBetawins = 0
 MCTSwins = 0   
 
@@ -319,78 +319,89 @@ height = (ROW_COUNT+1) * SQUARESIZE
 
 size = (width, height)
 
-RADIUS = int(SQUARESIZE/2 -5)         
-for i in range(total_games):
-    board = create_board()
-    #print_board(board)
-    game_over = False
-    #turn = 0   #player always goes first
-    turn = random.randint(ABPLAYER,MCTSAI)    #first player alternates
-    #turn = 1
-    pygame.init()
+RADIUS = int(SQUARESIZE/2 -5)  
 
-
-    screen = pygame.display.set_mode(size)
-    draw_board(board)
-    pygame.display.update()
-
-    myfont = pygame.font.SysFont("monospace", 75)
-
-    while not game_over:
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-                
-        #if there are no valid locations left: gameover (draw)
-        if get_valid_locations(board) == None:
-            label = myfont.render("DRAW MATCH.", 1, BLUE)
-            screen.blit(label, (40,10))     
-            game_over = True
-
-        # #Ask for player 1 input
-        if turn == ABPLAYER:
-            #RED player is set to use alphaBeta
-            col, minimax_score = alphaBeta(board, 4, -math.inf, math.inf, True)  #alphabeta solver
-            if is_valid_location(board,col):
-                row = get_next_open_row(board, col)
-                drop_piece(board, row, col, ABPLAYER_PEICE)
-                #if AlphaBeta wins: gameover
-                if winning_move(board, ABPLAYER_PEICE):
-                    #print("\nPlayer 1 Wins!!\n Here is the final board:\n ")
-                    label = myfont.render("ALPHABETA WINS!!!", 1, RED)
-                    screen.blit(label, (40,10))
-                    alphaBetawins += 1
-                    game_over = True
-
-                draw_board(board)
-                
-                turn += 1
-                turn = turn % 2 #turn will alternate between 0 and 1
-
-
-        # #Ask for Player 2 input
-        if turn == MCTSAI and not game_over:
-            #YELLOW player is set to use MCTS
-            col = monte_carlo_tree_search(board, SIMULATIONS, MCTSAI_PEICE)
-            if is_valid_location(board,col):
-                row = get_next_open_row(board, col)
-                drop_piece(board, row, col, MCTSAI_PEICE)
-                #if MCTS wins: gameover
-                if winning_move(board, MCTSAI_PEICE):
-                    label = myfont.render("MONTE CARLO ts WINS!!!", 1, YELLOW)
-                    screen.blit(label, (40,10))
-                    MCTSwins += 1
-                    game_over = True
-
-                draw_board(board)
-                
-                turn += 1
-                turn = turn % 2 #turn will alternate between 0 and 1
+f = open("50for50Mod2record.txt", "w+")
+for n in range(50):
+    f.write("Round " + str(n)+"Simulations: "+ str(SIMULATIONS) +'\n' )
+    for i in range(total_games):
+        if i%2 == 0 :
+            turn = 0   #AB always goes first
+        else:
+            turn = 1 #MCTS always goes first
         
-        #if game over then wait 3sec before next game starts
-        if game_over:
-            pygame.time.wait(3000)
+        
+        board = create_board()
+        #print_board(board)
+        game_over = False
+        #turn = random.randint(ABPLAYER,MCTSAI)    #first player alternates
+        pygame.init()
 
-#displaying the results at endgame
-endgame_results(total_games, alphaBetawins, MCTSwins)
+
+        screen = pygame.display.set_mode(size)
+        draw_board(board)
+        pygame.display.update()
+
+        myfont = pygame.font.SysFont("monospace", 75)
+
+        while not game_over:
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+                                
+            # #Ask for player 1 input
+            if turn == ABPLAYER:
+                #RED player is set to use alphaBeta
+                col, minimax_score = alphaBeta(board, 4, -math.inf, math.inf, True)  #alphabeta solver
+                if is_valid_location(board,col):
+                    row = get_next_open_row(board, col)
+                    drop_piece(board, row, col, ABPLAYER_PEICE)
+                    #if AlphaBeta wins: gameover
+                    if winning_move(board, ABPLAYER_PEICE):
+                        #print("\nPlayer 1 Wins!!\n Here is the final board:\n ")
+                        label = myfont.render("ALPHABETA WINS!!!", 1, RED)
+                        screen.blit(label, (40,10))
+                        alphaBetawins += 1
+                        game_over = True
+
+                    draw_board(board)
+                    
+                    turn += 1
+                    turn = turn % 2 #turn will alternate between 0 and 1
+
+
+            # #Ask for Player 2 input
+            if turn == MCTSAI and not game_over:
+                #YELLOW player is set to use MCTS
+                col = monte_carlo_tree_search(board, SIMULATIONS, MCTSAI_PEICE)
+                if is_valid_location(board,col):
+                    row = get_next_open_row(board, col)
+                    drop_piece(board, row, col, MCTSAI_PEICE)
+                    #if MCTS wins: gameover
+                    if winning_move(board, MCTSAI_PEICE):
+                        label = myfont.render("MONTE CARLO ts WINS!!!", 1, YELLOW)
+                        screen.blit(label, (40,10))
+                        MCTSwins += 1
+                        game_over = True
+
+                    draw_board(board)
+                    
+                    turn += 1
+                    turn = turn % 2 #turn will alternate between 0 and 1
+            
+            #if there are no valid locations left: gameover (draw)
+            if get_valid_locations(board) == None:
+                label = myfont.render("DRAW MATCH.", 1, BLUE)
+                screen.blit(label, (40,10))     
+                game_over = True
+            #if game over then wait 3sec before next game starts
+            if game_over:
+                #pygame.time.wait(3000)
+                pass
+
+    #displaying the results at endgame
+    f.write("[AlphaBeta Wins: " + str(alphaBetawins) + "]   [MCTSwins: " + str(MCTSwins) +"]\n")
+    endgame_results(total_games, alphaBetawins, MCTSwins)
+
+f.close()

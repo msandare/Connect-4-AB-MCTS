@@ -210,38 +210,8 @@ def monte_carlo_tree_search(board, SIMULATIONS, piece):
                 best_result = win_rate_MC
                 best_move_MC = col
             undo(board, row, col)
-    
-    #Simulate Opponent's plays and find best opponent move
-    opponent = ABPLAYER_PEICE
-    search_board = board.copy()
-    valid_moves = get_valid_locations(search_board)
-    toplay = turn ##maybe peice instead of player?
-    best_result, best_move = -20.0, None    # 
-    best_move_Opp = valid_moves[0]
-    wins_Opp = np.zeros(len(valid_moves))
-    visits_Opp = np.zeros(len(valid_moves))
-    for sim in range(SIMULATIONS):
-        for i, col in enumerate(valid_moves):
-            row = get_next_open_row(board, col)
-            drop_piece(search_board, row, col, opponent)
-            result = game_result(search_board)
-            if result == opponent:
-                #this move results in a win
-                undo(search_board, row, col)
-                return col
-            sim_result = simulate_play(search_board, piece)
-            wins_Opp[i] += sim_result
-            visits_Opp[i] += 1.0
-            win_rate_Opp = wins_Opp[i] / visits_Opp[i]
-            if win_rate_Opp > best_result:
-                best_result = win_rate_Opp
-                best_move_Opp = col   
-            undo(board, row, col)
 
-    #if opponents move returns a better score, use the opponents move instead
-    if max(win_rate_Opp,win_rate_MC) == win_rate_Opp:
-        best_move = best_move_Opp
-    else:
+  
         best_move = best_move_MC
         assert best_move is not None
     return best_move
